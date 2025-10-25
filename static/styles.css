@@ -1,0 +1,13 @@
+/* static/styles.css */
+body{font-family:Inter,Arial,Helvetica,sans-serif;background:#071226;color:#dfefff;margin:0;padding:20px}
+.container{max-width:1000px;margin:0 auto}
+h1{margin:0 0 10px}
+.upload, .preview, .chat{background:#021426;padding:12px;border-radius:8px;margin-top:12px}
+.thumb{max-width:320px;border-radius:6px;display:block;margin-bottom:8px}
+.extracted{white-space:pre-wrap;background:#001722;padding:8px;border-radius:6px;color:#cfe}
+.chatbox{display:flex;gap:8px;margin-top:8px}
+.chatbox input{flex:1;padding:8px;border-radius:6px;border:1px solid #034}
+.chatbox button{padding:8px 12px;border-radius:6px;background:#0a6fff;color:white;border:none}
+#log{max-height:220px;overflow:auto;padding:6px;background:#001119;border-radius:6px}
+.u{color:#9ff3ff;margin:6px 0}
+.a{color:#bfefff;margin:6px 0}

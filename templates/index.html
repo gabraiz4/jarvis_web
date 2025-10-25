@@ -1,0 +1,70 @@
+<!-- templates/index.html -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jarvis Web</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Jarvis — versão web</h1>
+
+    <section class="upload">
+      <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Enviar arquivo / imagem</button>
+      </form>
+      <div class="state">
+        <p><strong>Último doc:</strong> {{ state.last_doc_name or "—" }}</p>
+        <p><strong>Último img:</strong> {{ state.last_img_name or "—" }}</p>
+      </div>
+    </section>
+
+    <section class="preview">
+      {% if state.last_img_name %}
+        <h3>Preview imagem</h3>
+        <img src="{{ url_for('uploaded_file', filename=state.last_img_name) }}" alt="preview" class="thumb">
+        {% if state.last_img_text %}
+          <pre class="extracted">{{ state.last_img_text }}</pre>
+        {% else %}
+          <p class="note">Nenhum texto detectado (ou OCR indisponível).</p>
+        {% endif %}
+      {% endif %}
+
+      {% if state.last_doc_name %}
+        <h3>Conteúdo do documento ({{ state.last_doc_name }})</h3>
+        <pre class="extracted">{{ state.last_doc_text or "(sem texto disponível)" }}</pre>
+      {% endif %}
+    </section>
+
+    <section class="chat">
+      <h3>Fala com o Jarvis (fallback)</h3>
+      <div id="log"></div>
+      <div class="chatbox">
+        <input id="msg" placeholder="Pergunta — ex: resume o documento" />
+        <button id="send">Enviar</button>
+      </div>
+    </section>
+  </div>
+
+<script>
+document.getElementById('send').onclick = async () => {
+  const txt = document.getElementById('msg').value.trim();
+  if(!txt) return;
+  const log = document.getElementById('log');
+  log.innerHTML += `<div class="u">Você: ${txt}</div>`;
+  document.getElementById('msg').value = '';
+  const res = await fetch('/ask', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({text: txt})
+  });
+  const j = await res.json();
+  log.innerHTML += `<div class="a">Jarvis: ${j.answer}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+</script>
+</body>
+</html>
